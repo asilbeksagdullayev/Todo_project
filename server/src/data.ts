@@ -10,3 +10,4 @@ export const todos: IEntity.Todo[] = new Array(10).fill(null).map(() => ({
 	createdAt: faker.date.birthdate().toString(),
 	ownerIP: faker.internet.ip(),
 }));
+

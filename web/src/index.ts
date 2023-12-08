@@ -1,96 +1,110 @@
-const baseURL = 'http://localhost:4000/api';
+// import "./main.css";
 import "./style.css";
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-const input:HTMLInputElement=document.querySelector('.input')!;
-const btn:HTMLButtonElement=document.querySelector(".tugma")!;
-const dates:HTMLDivElement=document.querySelector(".dates")!;
-const error:HTMLParagraphElement=document.querySelector(".secret")!;
-const icon:HTMLDivElement=document.querySelector(".yitim")!;
-const sec:HTMLDivElement=document.createElement("div")!;
 
-async function init() {
-	const todos = await getTodos();
-	console.log('todos = ', todos);
-}
-
-window.addEventListener('load', init);
-
+const loading: HTMLDivElement = document.querySelector(".contener10")!;
+const contaner: HTMLDivElement = document.querySelector(".contener")!;
+const malumot: HTMLDivElement = document.querySelector(".malumot")!;
+const btn: HTMLButtonElement = document.querySelector(".btn")!;
+const input: HTMLInputElement = document.querySelector(".input")!;
+const error: HTMLParagraphElement = document.querySelector(".error")!;
+const baseURL = "http://localhost:4000/api";
 async function getTodos() {
-	const res = await fetch(`${baseURL}/todos`);
-	const data = await res.json();
+  const res = await fetch(`${baseURL}/todos`);
+  if (!res.ok) {
+    loading.style.display = "block";
+    contaner.style.display = "none";
+  }
+  const data = await res.json();
+  return data;
+}
+async function init() {
+  const todos = await getTodos();
 
-	return data;
+  for (let i = 0; i < todos.length; i++) {
+    const div: HTMLDivElement = document.createElement("div")!;
+    const p: HTMLParagraphElement = document.createElement("p")!;
+    const input: HTMLInputElement = document.createElement("input")!;
+
+    div.className = "data";
+    input.className = "radio";
+    input.type = "radio";
+    input.addEventListener("click", () => {
+      deleteItem(todos[i].id);
+    });
+
+    p.innerText = todos[i].title;
+    div.appendChild(input);
+    div.appendChild(p);
+
+    malumot.appendChild(div);
+  }
+
+  console.log("todos = ", todos);
 }
 
-input.addEventListener("keydown", (e)=>{
-	if (e.key==="Enter") {
-		btn.click();
+window.addEventListener("load", init);
 
-	}
-})
-
-
-function displayUserData() {
-	const value = input.value;
-const boxdiv = document.createElement("div");
-boxdiv.className= "boxdiv";
-
-const param = document.createElement("p");
-param.innerText = value;
-
-boxdiv.innerHTML = `
-<div class="yitim">
-<i class="bi bi-file-earmark-richtext-fill namesss">
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-richtext-fill" viewBox="0 0 16 16">
-<path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M7 6.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m-.861 1.542 1.33.886 1.854-1.855a.25.25 0 0 1 .289-.047l1.888.974V9.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V9s1.54-1.274 1.639-1.208M5 11h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1"/>
-</svg>
-</i>
-</div>
-${value}
-<div class="iconsss">
-<div>
-<i class="bi bi-pencil">
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-		<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-</svg>
-</i>
-</div>
-<div>
-<i class="bi bi-trash trash">
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-	<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-	<path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-</svg></i>
-</div>
-</div>
-
-
-
-`;
-const trashIcon = boxdiv.querySelector(".trash");
-
-trashIcon.addEventListener("click", () => {
-				dates.removeChild(boxdiv);
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    btn.click();
+    input.value = "";
+  }
 });
 
+btn.addEventListener("click", async () => {
+  if (!input.value) {
+    error.innerText = "Soz kiriting";
+    return;
+  }
 
-		dates.appendChild(boxdiv);
-input.value = "";
+  error.innerText = "";
 
+  // Yozilgan malumotni serverga yuborish
+  try {
+    const response = await fetch(`${baseURL}/todos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title: input.value }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Malumotni yuborishda xatolik");
+    }
+
+    const result = await response.json();
+    console.log("Yuborilgan malumot:", result);
+  } catch (error) {
+    console.error("Xatolik yuz berdi:", error.message);
+  }
+  input.value = "";
+  window.location.reload();
+});
+
+//  bazani aylanish
+
+const url = "http://localhost:4000/api/todos";
+
+async function deleteItem(itemId: any) {
+  console.log(itemId);
+
+  try {
+    const response = await fetch(`${url}/${itemId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Malumotni o'chirishda xatolik");
+    }
+
+    const result = await response.json();
+    console.log("O'chirilgan malumot:", result);
+    window.location.reload();
+  } catch (error) {
+    console.error("Xatolik yuz berdi:", error.message);
+  }
 }
-
-btn.addEventListener("click", (e)=>{
-	// console.log(value)
-	if (input.value !== "") {
-
-		displayUserData();
-
-	} else {
-
-		error.style.display = "block";
-		setTimeout(() => {
-			error.style.display = "none";
-		}, 3000);
-		// console.log("error");
-	}
-});
